@@ -299,6 +299,7 @@ def mtn_pay_with_wallet(request):
             bundle_number=phone_number,
             offer=f"{bundle}MB",
             reference=reference,
+            transaction_status="Pending"
         )
         new_mtn_transaction.save()
         user.wallet -= float(amount)
