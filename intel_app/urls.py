@@ -38,8 +38,8 @@ urlpatterns = [
     path('elevated/topup-list', views.topup_list, name="topup_list"),
     path('credit/<str:reference>', views.credit_user_from_list, name='credit'),
 
-    path('hubtel_webhook', views.hubtel_webhook, name='hubtel_webhook'),
-    path('import_thing', views.populate_custom_users_from_excel, name="import_users"),
+    # path('hubtel_webhook', views.hubtel_webhook, name='hubtel_webhook'),
+    # path('import_thing', views.populate_custom_users_from_excel, name="import_users"),
     path('delete', views.delete_custom_users, name='delete'),
 
     path('login', authViews.login_page, name='login'),
