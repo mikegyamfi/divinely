@@ -30,7 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'dcs-qzbfz.ondigitalocean.app'
+    'dcs-qzbfz.ondigitalocean.app',
+    'www.divinelychosenstar.com'
 ]
 
 
