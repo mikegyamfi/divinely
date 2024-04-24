@@ -58,13 +58,13 @@ def pay_with_wallet(request):
         send_bundle_response = helper.send_bundle(request.user, phone_number, bundle, reference)
         data = send_bundle_response.json()
         print(data)
+        #
+        # sms_headers = {
+        #     'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
+        #     'Content-Type': 'application/json'
+        # }
 
-        sms_headers = {
-            'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
-            'Content-Type': 'application/json'
-        }
-
-        sms_url = 'https://webapp.usmsgh.com/api/sms/send'
+        # sms_url = 'https://webapp.usmsgh.com/api/sms/send'
         if send_bundle_response.status_code == 200:
             if data["code"] == "0000":
                 new_transaction = models.IShareBundleTransaction.objects.create(
@@ -99,7 +99,7 @@ def pay_with_wallet(request):
                 # }
 
                 response2 = requests.get(
-                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cFFLTUliZlFzQ3BJU1puWUdkV0U&to=0{request.user.phone}&from=DCS.COM&sms={receiver_message}")
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cFFLTUliZlFzQ3BJU1puWUdkV0U&to=0{request.user.phone}&from=DCS.COM&sms={sms_message}")
                 print(response2.text)
 
                 return JsonResponse({'status': 'Transaction Completed Successfully', 'icon': 'success'})
@@ -649,14 +649,14 @@ def mark_as_sent(request, pk):
             'Content-Type': 'application/json'
         }
 
-        sms_url = 'https://webapp.usmsgh.com/api/sms/send'
-        sms_message = f"Your account has been credited with {txn.offer}.\nTransaction Reference: {txn.reference}"
-
-        sms_body = {
-            'recipient': f"233{txn.bundle_number}",
-            'sender_id': 'Data4All',
-            'message': sms_message
-        }
+        # sms_url = 'https://webapp.usmsgh.com/api/sms/send'
+        # sms_message = f"Your account has been credited with {txn.offer}.\nTransaction Reference: {txn.reference}"
+        #
+        # sms_body = {
+        #     'recipient': f"233{txn.bundle_number}",
+        #     'sender_id': 'Data4All',
+        #     'message': sms_message
+        # }
         response1 = requests.get(
             f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cFFLTUliZlFzQ3BJU1puWUdkV0U&to=0{txn.bundle_number}&from=DCS.COM&sms={sms_message}")
         print(response1.text)
@@ -767,21 +767,22 @@ def credit_user(request):
                 user_needed.save()
                 print(user_needed.username)
                 messages.success(request, "Crediting Successful")
-                sms_headers = {
-                    'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
-                    'Content-Type': 'application/json'
-                }
+                # sms_headers = {
+                #     'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
+                #     'Content-Type': 'application/json'
+                # }
+                #
+                # sms_url = 'https://webapp.usmsgh.com/api/sms/send'
+                sms_message = f"Hello {user_needed},\nYour DCS wallet has been credit with GHS{amount}."
 
-                sms_url = 'https://webapp.usmsgh.com/api/sms/send'
-                sms_message = f"Hello {user_needed},\nYour DataForAll wallet has been credit with GHS{amount}.\nDataForAll."
-
-                sms_body = {
-                    'recipient': f"233{user_needed.phone}",
-                    'sender_id': 'Data4All',
-                    'message': sms_message
-                }
-                response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
-                print(response.text)
+                # sms_body = {
+                #     'recipient': f"233{user_needed.phone}",
+                #     'sender_id': 'Data4All',
+                #     'message': sms_message
+                # }
+                response1 = requests.get(
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cFFLTUliZlFzQ3BJU1puWUdkV0U&to=0{user_needed.phone}&from=DCS.COM&sms={sms_message}")
+                print(response1.text)
                 return redirect('credit_user')
         context = {'form': form}
         return render(request, "layouts/services/credit.html", context=context)
@@ -897,19 +898,19 @@ def credit_user_from_list(request, reference):
         crediting.status = True
         crediting.credited_at = datetime.now()
         crediting.save()
-        sms_headers = {
-            'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
-            'Content-Type': 'application/json'
-        }
-
-        sms_url = 'https://webapp.usmsgh.com/api/sms/send'
+        # sms_headers = {
+        #     'Authorization': 'Bearer 1135|1MWAlxV4XTkDlfpld1VC3oRviLhhhZIEOitMjimq',
+        #     'Content-Type': 'application/json'
+        # }
+        #
+        # sms_url = 'https://webapp.usmsgh.com/api/sms/send'
         sms_message = f"Hello,\nYour wallet has been topped up with GHS{amount}.\nReference: {reference}.\nThank you"
-
-        sms_body = {
-            'recipient': f"233{custom_user.phone}",
-            'sender_id': 'Data4All',
-            'message': sms_message
-        }
+        #
+        # sms_body = {
+        #     'recipient': f"233{custom_user.phone}",
+        #     'sender_id': 'Data4All',
+        #     'message': sms_message
+        # }
         response1 = requests.get(
             f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=cFFLTUliZlFzQ3BJU1puWUdkV0U&to=0{custom_user.phone}&from=DCS.COM&sms={sms_message}")
         print(response1.text)
