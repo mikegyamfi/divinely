@@ -89,7 +89,7 @@ def pay_with_wallet(request):
                 # }
 
                 response1 = requests.get(
-                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{num_without_0}&from=DCS&sms={receiver_message}")
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{num_without_0}&from=DCS.COM&sms={receiver_message}")
                 print(response1.text)
 
                 # sms_body = {
@@ -99,7 +99,7 @@ def pay_with_wallet(request):
                 # }
 
                 response2 = requests.get(
-                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{request.user.phone}&from=DCS&sms={sms_message}")
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{request.user.phone}&from=DCS.COM&sms={sms_message}")
                 print(response2.text)
 
                 return JsonResponse({'status': 'Transaction Completed Successfully', 'icon': 'success'})
@@ -658,7 +658,7 @@ def mark_as_sent(request, pk):
         #     'message': sms_message
         # }
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{txn.bundle_number}&from=DCS&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{txn.bundle_number}&from=DCS.COM&sms={sms_message}")
         print(response1.text)
         return redirect('mtn_admin')
 
@@ -781,7 +781,7 @@ def credit_user(request):
                 #     'message': sms_message
                 # }
                 response1 = requests.get(
-                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{user_needed.phone}&from=DCS&sms={sms_message}")
+                    f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{user_needed.phone}&from=DCS.COM&sms={sms_message}")
                 print(response1.text)
                 return redirect('credit_user')
         context = {'form': form}
@@ -912,7 +912,7 @@ def credit_user_from_list(request, reference):
         #     'message': sms_message
         # }
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{custom_user.phone}&from=DCS&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{custom_user.phone}&from=DCS.COM&sms={sms_message}")
         print(response1.text)
         messages.success(request, f"{user} has been credited with {amount}")
         return redirect('topup_list')
