@@ -78,7 +78,7 @@ def pay_with_wallet(request):
                 user.wallet -= float(amount)
                 user.save()
                 receiver_message = f"Your bundle purchase has been completed successfully. {bundle}MB has been credited to you by {request.user.phone}.\nReference: {reference}\n"
-                sms_message = f"Hello @{request.user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {reference}\nCurrent Wallet Balance: {user.wallet}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+                sms_message = f"Hello @{request.user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {reference}\nCurrent Wallet Balance: {user.wallet}\nThank you for using DCS.\n\n"
 
                 num_without_0 = phone_number[1:]
                 print(num_without_0)
@@ -217,14 +217,14 @@ def airtel_tigo(request):
         #         print(request.user.phone)
         #         print("***********")
         #         receiver_message = f"Your bundle purchase has been completed successfully. {bundle}MB has been credited to you by {request.user.phone}.\nReference: {payment_reference}\n"
-        #         sms_message = f"Hello @{request.user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {payment_reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+        #         sms_message = f"Hello @{request.user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {payment_reference}\nThank you for using.\n\nThe"
         #
         #         return JsonResponse({'status': 'Transaction Completed Successfully', 'icon': 'success'})
         #     else:
         #         transaction_to_be_updated = models.IShareBundleTransaction.objects.get(reference=payment_reference)
         #         transaction_to_be_updated.transaction_status = "Failed"
         #         new_transaction.save()
-        #         sms_message = f"Hello @{request.user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+        #         sms_message = f"Hello @{request.user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using.\n\nThe"
         #
         #         sms_body = {
         #             'recipient': f"233{request.user.phone}",
@@ -236,7 +236,7 @@ def airtel_tigo(request):
         #     transaction_to_be_updated = models.IShareBundleTransaction.objects.get(reference=payment_reference)
         #     transaction_to_be_updated.transaction_status = "Failed"
         #     new_transaction.save()
-        #     sms_message = f"Hello @{request.user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+        #     sms_message = f"Hello @{request.user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using.\n\nThe"
         #
         #     sms_body = {
         #         'recipient': f'233{request.user.phone}',
@@ -1012,7 +1012,7 @@ def credit_user_from_list(request, reference):
 #                             print(user.phone)
 #                             print("***********")
 #                             receiver_message = f"Your bundle purchase has been completed successfully. {bundle}MB has been credited to you by {user.phone}.\nReference: {reference}\n"
-#                             sms_message = f"Hello @{user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+#                             sms_message = f"Hello @{user.username}. Your bundle purchase has been completed successfully. {bundle}MB has been credited to {phone_number}.\nReference: {reference}\nThank you for using.\n\nThe"
 #
 #                             sms_body = {
 #                                 'recipient': f"233{user.phone}",
@@ -1031,7 +1031,7 @@ def credit_user_from_list(request, reference):
 #                                 reference=reference)
 #                             transaction_to_be_updated.transaction_status = "Failed"
 #                             new_transaction.save()
-#                             sms_message = f"Hello @{user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+#                             sms_message = f"Hello @{user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {reference}\nThank you for using.\n\nThe"
 #
 #                             sms_body = {
 #                                 'recipient': f"233{user.phone}",
@@ -1044,7 +1044,7 @@ def credit_user_from_list(request, reference):
 #                             reference=reference)
 #                         transaction_to_be_updated.transaction_status = "Failed"
 #                         new_transaction.save()
-#                         sms_message = f"Hello @{user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using Data4All GH.\n\nThe Data4All GH"
+#                         sms_message = f"Hello @{user.username}. Something went wrong with your transaction. Contact us for enquiries.\nBundle: {bundle}MB\nPhone Number: {phone_number}.\nReference: {payment_reference}\nThank you for using.\n\nThe"
 #
 #                         sms_body = {
 #                             'recipient': f'233{user.phone}',
