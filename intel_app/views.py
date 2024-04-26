@@ -811,6 +811,12 @@ def topup_info(request):
             'Content-Type': 'application/json'
         }
 
+        sms_message = f"A top up request has been placed.\nGHS{amount} for {user}.\nReference: {reference}"
+
+        response1 = requests.get(
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0503015698&from=DCS.COM&sms={sms_message}")
+        print(response1.text)
+
         messages.success(request, f"Your Request has been sent successfully. Kindly go on to pay to {admin} and use the reference stated as reference. Reference: {reference}")
         return redirect("request_successful", reference)
     # if request.method == "POST":
