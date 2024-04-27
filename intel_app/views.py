@@ -293,7 +293,7 @@ def mtn_pay_with_wallet(request):
         print(bundle)
 
         print("used else")
-        sms_message = f"An order has been placed. {bundle}MB for {phone_number}"
+        sms_message = f"An order has been placed. {bundle}MB for {phone_number}.\nReference:{reference}"
         new_mtn_transaction = models.MTNTransaction.objects.create(
             user=request.user,
             bundle_number=phone_number,
@@ -304,13 +304,14 @@ def mtn_pay_with_wallet(request):
         new_mtn_transaction.save()
         user.wallet -= float(amount)
         user.save()
-        sms_body = {
-            'recipient': "233540975553",
-            'sender_id': 'Data4All',
-            'message': sms_message
-        }
-        # response = requests.request('POST', url=sms_url, params=sms_body, headers=sms_headers)
-        # print(response.text)
+        # sms_body = {
+        #     'recipient': "233540975553",
+        #     'sender_id': 'Data4All',
+        #     'message': sms_message
+        # }
+        response1 = requests.get(
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0503015698&from=DCS.COM&sms={sms_message}")
+        print(response1.text)
         return JsonResponse({'status': "Your transaction will be completed shortly", 'icon': 'success'})
     return redirect('mtn')
 
@@ -650,7 +651,7 @@ def mark_as_sent(request, pk):
         }
 
         # sms_url = 'https://webapp.usmsgh.com/api/sms/send'
-        sms_message = f"Your account has been credited with {txn.offer}.\nTransaction Reference: {txn.reference}"
+        sms_message = f"Your MTN transaction has been completed. {txn.bundle_number} has been credited with {txn.offer}.\nTransaction Reference: {txn.reference}"
         #
         # sms_body = {
         #     'recipient': f"233{txn.bundle_number}",
@@ -658,7 +659,7 @@ def mark_as_sent(request, pk):
         #     'message': sms_message
         # }
         response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{txn.bundle_number}&from=DCS.COM&sms={sms_message}")
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{txn.user.phone}&from=DCS.COM&sms={sms_message}")
         print(response1.text)
         return redirect('mtn_admin')
 
