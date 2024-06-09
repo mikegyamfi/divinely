@@ -878,7 +878,7 @@ def request_successful(request, reference):
         "name": admin.name,
         "number": f"0{admin.momo_number}",
         "channel": admin.payment_channel,
-        "reference": references
+        "reference": reference
     }
     return render(request, "layouts/services/request_successful.html", context=context)
 
