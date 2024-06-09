@@ -389,54 +389,53 @@ def afa_registration(request):
     price = models.AdminInfo.objects.filter().first().afa_price
     user_email = request.user.email
     print(price)
-    if request.method == "POST":
-        form = forms.AFARegistrationForm(request.POST)
-        if form.is_valid():
-            # name = transaction_details["name"]
-            # phone_number = transaction_details["phone"]
-            # gh_card_number = transaction_details["card"]
-            # occupation = transaction_details["occupation"]
-            # date_of_birth = transaction_details["date_of_birth"]
-            details = {
-                "name": form.cleaned_data["name"],
-                "phone": form.cleaned_data["phone_number"],
-                "card": form.cleaned_data["gh_card_number"],
-                "occupation": form.cleaned_data["occupation"],
-                "date_of_birth": form.cleaned_data["date_of_birth"],
-                "location": form.cleaned_data["location"]
-            }
-            new_payment = models.Payment.objects.create(
-                user=request.user,
-                reference=reference,
-                transaction_details=details,
-                transaction_date=datetime.now(),
-                channel="afa"
-            )
-            new_payment.save()
-
-            url = "https://payproxyapi.hubtel.com/items/initiate"
-
-            payload = json.dumps({
-                "totalAmount": price,
-                "description": "Payment for AFA Registration",
-                "callbackUrl": "https://www.dataforall.store/hubtel_webhook",
-                "returnUrl": "https://www.dataforall.store",
-                "cancellationUrl": "https://www.dataforall.store",
-                "merchantAccountNumber": "2019735",
-                "clientReference": new_payment.reference
-            })
-            headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic eU9XeW9nOjc3OGViODU0NjRiYjQ0ZGRiNmY3Yzk1YTUwYmJjZTAy'
-            }
-
-            response = requests.request("POST", url, headers=headers, data=payload)
-
-            data = response.json()
-
-            checkoutUrl = data['data']['checkoutUrl']
-
-            return redirect(checkoutUrl)
+    # if request.method == "POST":
+    #     form = forms.AFARegistrationForm(request.POST)
+    #     if form.is_valid():
+    #         # name = transaction_details["name"]
+    #         # phone_number = transaction_details["phone"]
+    #         # gh_card_number = transaction_details["card"]
+    #         # occupation = transaction_details["occupation"]
+    #         # date_of_birth = transaction_details["date_of_birth"]
+    #         details = {
+    #             "name": form.cleaned_data["name"],
+    #             "phone": form.cleaned_data["phone_number"],
+    #             "card": form.cleaned_data["gh_card_number"],
+    #             "occupation": form.cleaned_data["occupation"],
+    #             "date_of_birth": form.cleaned_data["date_of_birth"],
+    #             "location": form.cleaned_data["location"]
+    #         }
+    #         new_payment = models.Payment.objects.create(
+    #             user=request.user,
+    #             reference=reference,
+    #             transaction_details=details,
+    #             transaction_date=datetime.now(),
+    #             channel="afa"
+    #         )
+    #         new_payment.save()
+    #
+    #         url = "https://payproxyapi.hubtel.com/items/initiate"
+    #
+    #         payload = json.dumps({
+    #             "totalAmount": price,
+    #             "description": "Payment for AFA Registration",
+    #             "callbackUrl": "https://www.dataforall.store/hubtel_webhook",
+    #             "returnUrl": "https://www.dataforall.store",
+    #             "cancellationUrl": "https://www.dataforall.store",
+    #             "merchantAccountNumber": "2019735",
+    #             "clientReference": new_payment.reference
+    #         })
+    #         headers = {
+    #             'Content-Type': 'application/json',
+    #         }
+    #
+    #         response = requests.request("POST", url, headers=headers, data=payload)
+    #
+    #         data = response.json()
+    #
+    #         checkoutUrl = data['data']['checkoutUrl']
+    #
+    #         return redirect(checkoutUrl)
     form = forms.AFARegistrationForm()
     context = {'form': form, 'ref': reference, 'price': price, 'id': db_user_id, "email": user_email,
                "wallet": 0 if user.wallet is None else user.wallet}
@@ -529,7 +528,6 @@ def big_time(request):
     #         })
     #         headers = {
     #             'Content-Type': 'application/json',
-    #             'Authorization': 'Basic eU9XeW9nOjc3OGViODU0NjRiYjQ0ZGRiNmY3Yzk1YTUwYmJjZTAy'
     #         }
     #
     #         response = requests.request("POST", url, headers=headers, data=payload)
