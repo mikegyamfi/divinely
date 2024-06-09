@@ -825,7 +825,7 @@ def topup_info(request):
             f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0503015698&from=DCS.COM&sms={sms_message}")
         print(response1.text)
 
-        messages.success(request, f"Your Request has been sent successfully. Kindly go on to pay to {admin} and use the reference stated as reference. Reference: {reference}")
+        messages.success(request, f"Your Request has been sent successfully.")
         return redirect("request_successful", reference)
     # if request.method == "POST":
     #     admin = models.AdminInfo.objects.filter().first().phone_number
@@ -878,7 +878,7 @@ def request_successful(request, reference):
         "name": admin.name,
         "number": f"0{admin.momo_number}",
         "channel": admin.payment_channel,
-        "reference": reference
+        "reference": references
     }
     return render(request, "layouts/services/request_successful.html", context=context)
 
