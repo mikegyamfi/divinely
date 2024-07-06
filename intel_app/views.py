@@ -806,6 +806,9 @@ def topup_info(request):
         user = models.CustomUser.objects.get(id=request.user.id)
         amount = request.POST.get("amount")
         print(amount)
+        if float(amount) < 20:
+            messages.info(request, "Minimum amount is GHS 20")
+            return redirect('topup_info')
         reference = helper.top_up_ref_generator()
         new_topup_request = models.TopUpRequest.objects.create(
             user=request.user,
