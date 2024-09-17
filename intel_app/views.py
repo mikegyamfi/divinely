@@ -1335,22 +1335,80 @@ def voda_pay_with_wallet(request):
         else:
             bundle = models.VodaBundlePrice.objects.get(price=float(amount)).bundle_volume
 
-        print(bundle)
-        new_mtn_transaction = models.VodafoneTransaction.objects.create(
-            user=request.user,
-            bundle_number=phone_number,
-            offer=f"{bundle}MB",
-            reference=reference,
-        )
-        new_mtn_transaction.save()
-        user.wallet -= float(amount)
-        user.save()
+        url = "https://www.value4moni.com/api/v1/inititate_transaction"
 
-        sms_message = f"Telecel order has been placed. {bundle}MB for {phone_number}. Reference: {reference}"
-        response1 = requests.get(
-            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{admin}&from=DCS.COM&sms={sms_message}")
-        print(response1.text)
-        return JsonResponse({'status': "Your transaction will be completed shortly", 'icon': 'success'})
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        # Create the payload for the POST request
+        payload = {
+            "API_Key": config("MONI_API_KEY"),
+            "Receiver": str(phone_number),
+            "Volume": str(int(bundle)),
+            "Reference": reference,
+            "Package_Type": "Telecel"
+        }
+
+        # Convert the payload into JSON format
+        json_payload = json.dumps(payload)
+
+        # Make the POST request to the API
+        response = requests.post(url, headers=headers, data=json_payload)
+
+        print(response.json())
+
+        data = response.json()
+        if response.status_code == 200:
+            if data['code'] == '200':
+                new_mtn_transaction = models.VodafoneTransaction.objects.create(
+                    user=request.user,
+                    bundle_number=phone_number,
+                    offer=f"{bundle}MB",
+                    reference=reference,
+                    transaction_status="Completed"
+                )
+                new_mtn_transaction.save()
+                user.wallet -= float(amount)
+                user.save()
+                return JsonResponse({'status': "Transaction Completed Successfully", 'icon': 'success'})
+            else:
+                new_mtn_transaction = models.VodafoneTransaction.objects.create(
+                    user=request.user,
+                    bundle_number=phone_number,
+                    offer=f"{bundle}MB",
+                    reference=reference,
+                    transaction_status="Failed"
+                )
+                new_mtn_transaction.save()
+                return JsonResponse({'status': "Something went wrong", 'icon': 'success'})
+        else:
+            new_mtn_transaction = models.VodafoneTransaction.objects.create(
+                user=request.user,
+                bundle_number=phone_number,
+                offer=f"{bundle}MB",
+                reference=reference,
+                transaction_status="Failed"
+            )
+            new_mtn_transaction.save()
+            return JsonResponse({'status': "Something went wrong", 'icon': 'success'})
+
+        # print(bundle)
+        # new_mtn_transaction = models.VodafoneTransaction.objects.create(
+        #     user=request.user,
+        #     bundle_number=phone_number,
+        #     offer=f"{bundle}MB",
+        #     reference=reference,
+        # )
+        # new_mtn_transaction.save()
+        # user.wallet -= float(amount)
+        # user.save()
+
+        # sms_message = f"Telecel order has been placed. {bundle}MB for {phone_number}. Reference: {reference}"
+        # response1 = requests.get(
+        #     f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0{admin}&from=DCS.COM&sms={sms_message}")
+        # print(response1.text)
+        # return JsonResponse({'status': "Your transaction will be completed shortly", 'icon': 'success'})
     return redirect('voda')
 
 
