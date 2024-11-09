@@ -6,11 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('intel_app', '0017_admininfo_paystack_active_afaregistration_amount_and_more'),
     ]
 
     operations = [
-
+        migrations.AddField(
+            model_name='topuprequest',
+            name='payment_channel',
+            field=models.CharField(max_length=250),
+        ),
     ]
