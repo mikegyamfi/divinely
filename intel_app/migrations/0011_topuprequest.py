@@ -12,5 +12,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-
+        migrations.CreateModel(
+            name='TopUpRequest',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('reference', models.CharField(max_length=250)),
+                ('amount', models.FloatField()),
+                ('status', models.BooleanField(default=False)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.AlterField(
+            model_name='topuprequest',
+            name='payment_channel',
+            field=models.CharField(blank=True, max_length=100, null=True),
+        ),
     ]
