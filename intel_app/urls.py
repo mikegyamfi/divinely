@@ -49,6 +49,9 @@ urlpatterns = [
                   path('elevated/topup-list', views.topup_list, name="topup_list"),
                   path('credit/<str:reference>', views.credit_user_from_list, name='credit'),
 
+                  path('wallet/transactions/', views.wallet_transactions, name='wallet_transactions'),
+                  path('paystack_webhook', views.paystack_webhook, name='paystack_webhook'),
+
                   # path('hubtel_webhook', views.hubtel_webhook, name='hubtel_webhook'),
                   # path('import_thing', views.populate_custom_users_from_excel, name="import_users"),
                   path('delete', views.delete_custom_users, name='delete'),

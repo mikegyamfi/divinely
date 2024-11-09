@@ -45,12 +45,14 @@ class AdminInfo(models.Model):
     )
     ishare_source = models.CharField(max_length=250, null=True, blank=True, choices=ishare_choices,
                                      default="Value4Moni")
+    paystack_active = models.BooleanField(default=False)
 
 
 class IShareBundleTransaction(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     bundle_number = models.BigIntegerField(null=False, blank=False)
     offer = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.FloatField(null=False, blank=False, default=0.0)
     reference = models.CharField(max_length=20, null=False, blank=True)
     transaction_date = models.DateTimeField(auto_now_add=True)
     transaction_status = models.CharField(max_length=100, null=False)
@@ -124,11 +126,13 @@ class BigTimeTransaction(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     bundle_number = models.BigIntegerField(null=False, blank=False)
     offer = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.FloatField(null=False, blank=False, default=0.0)
     reference = models.CharField(max_length=20, null=False, blank=True)
     transaction_date = models.DateTimeField(auto_now_add=True)
     choices = (
         ("Pending", "Pending"),
         ("Completed", "Completed"),
+        ("Processing", "Processing"),
         ("Failed", "Failed")
     )
     transaction_status = models.CharField(max_length=100, choices=choices, default="Pending")
@@ -143,6 +147,7 @@ class AFARegistration(models.Model):
     phone_number = models.BigIntegerField(null=False, blank=False)
     gh_card_number = models.CharField(null=False, blank=False, max_length=256)
     name = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.FloatField(null=False, blank=False, default=0.0)
     occupation = models.CharField(max_length=20, null=False, blank=True)
     reference = models.CharField(max_length=20, null=False, blank=True)
     date_of_birth = models.DateField(null=False, blank=False)
@@ -150,6 +155,7 @@ class AFARegistration(models.Model):
     choices = (
         ("Pending", "Pending"),
         ("Completed", "Completed"),
+        ("Processing", "Processing"),
         ("Failed", "Failed")
     )
     transaction_status = models.CharField(max_length=100, choices=choices, default="Pending")
@@ -173,10 +179,12 @@ class MTNTransaction(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     bundle_number = models.BigIntegerField(null=False, blank=False)
     offer = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.FloatField(null=False, blank=False, default=0.0)
     reference = models.CharField(max_length=20, null=False, blank=True)
     transaction_date = models.DateTimeField(auto_now_add=True)
     choices = (
         ("Pending", "Pending"),
+        ("Processing", "Processing"),
         ("Completed", "Completed"),
         ("Failed", "Failed")
     )
@@ -235,6 +243,11 @@ class TopUpRequest(models.Model):
     amount = models.FloatField(blank=False, null=False)
     status = models.BooleanField(default=False, blank=False, null=False)
     date = models.DateTimeField(auto_now_add=True)
+    choices = [
+        ("Paystack", "Paystack"),
+        ("Manual", "Manual")
+    ]
+    payment_channel = models.CharField(max_length=100, null=True, blank=True)
     credited_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -275,6 +288,7 @@ class VodafoneTransaction(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     bundle_number = models.BigIntegerField(null=False, blank=False)
     offer = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.FloatField(null=False, blank=False, default=0.0)
     reference = models.CharField(max_length=20, null=False, blank=True)
     transaction_date = models.DateTimeField(auto_now_add=True)
     choices = (
@@ -288,3 +302,21 @@ class VodafoneTransaction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.bundle_number} - {self.reference}"
+
+
+class WalletTransaction(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    choices = [
+        ("Credit", "Credit"),
+        ("Debit", "Debit")
+    ]
+    transaction_type = models.CharField(max_length=250, null=False, blank=False, choices=choices)
+    transaction_amount = models.FloatField(null=False, blank=False)
+    transaction_use = models.CharField(max_length=250, null=False, blank=False)
+    new_balance = models.FloatField(null=False, blank=False)
+    transaction_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.transaction_type} - {self.transaction_amount}"
+
+
