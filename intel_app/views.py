@@ -85,7 +85,7 @@ def pay_with_wallet(request):
                         user.wallet -= float(amount)
                         user.save()
 
-                        models.WalletTransaction.objects.create(
+                        models.WalletTransactionn.objects.create(
                             user=user,
                             transaction_type='Debit',
                             transaction_amount=amount,
@@ -136,7 +136,7 @@ def pay_with_wallet(request):
                         user.wallet -= float(amount)
                         user.save()
 
-                        models.WalletTransaction.objects.create(
+                        models.WalletTransactionn.objects.create(
                             user=user,
                             transaction_type='Debit',
                             transaction_amount=amount,
@@ -373,7 +373,7 @@ def mtn_pay_with_wallet(request):
             user.wallet -= float(amount)
             user.save()
 
-            models.WalletTransaction.objects.create(
+            models.WalletTransactionn.objects.create(
                 user=user,
                 transaction_type='Debit',
                 transaction_amount=amount,
@@ -433,7 +433,7 @@ def big_time_pay_with_wallet(request):
             user.wallet -= float(amount)
             user.save()
 
-            models.WalletTransaction.objects.create(
+            models.WalletTransactionn.objects.create(
                 user=user,
                 transaction_type='Debit',
                 transaction_amount=amount,
@@ -570,7 +570,7 @@ def afa_registration_wallet(request):
             user.wallet -= float(price)
             user.save()
 
-            models.WalletTransaction.objects.create(
+            models.WalletTransactionn.objects.create(
                 user=user,
                 transaction_type='Debit',
                 transaction_amount=price,
@@ -1402,7 +1402,7 @@ def voda_pay_with_wallet(request):
             user.wallet -= float(amount)
             user.save()
 
-            models.WalletTransaction.objects.create(
+            models.WalletTransactionn.objects.create(
                 user=user,
                 transaction_type='Debit',
                 transaction_amount=amount,
@@ -1546,8 +1546,8 @@ def paystack_webhook(request):
                     time_credited=datetime.now(),
                 )
 
-            # Create WalletTransaction
-            models.WalletTransaction.objects.create(
+            # Create WalletTransactionn
+            models.WalletTransactionn.objects.create(
                 user=user,
                 transaction_type='Credit',
                 transaction_amount=real_amount,
@@ -1579,7 +1579,7 @@ def paystack_webhook(request):
 @login_required
 def wallet_transactions(request):
     user = request.user
-    transactions = models.WalletTransaction.objects.filter(user=user).order_by('-transaction_date')[:300]
+    transactions = models.WalletTransactionn.objects.filter(user=user).order_by('-transaction_date')[:300]
     print(transactions)
     wallet_balance = user.wallet
     context = {

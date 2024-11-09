@@ -143,7 +143,7 @@ class TransactionAdmin(ExportActionMixin, admin.ModelAdmin):
                 transaction_obj.transaction_status = 'Canceled and Refunded'
                 transaction_obj.save()
 
-                models.WalletTransaction.objects.create(
+                models.WalletTransactionn.objects.create(
                     user=user,
                     transaction_type='Credit',
                     transaction_amount=amount,
@@ -171,7 +171,7 @@ class TransactionAdmin(ExportActionMixin, admin.ModelAdmin):
                 transaction_obj.transaction_status = 'Canceled and Refunded'
                 transaction_obj.save()
 
-                models.WalletTransaction.objects.create(
+                models.WalletTransactionn.objects.create(
                     user=user,
                     transaction_type='Credit',
                     transaction_amount=amount,
@@ -201,7 +201,7 @@ class TransactionAdmin(ExportActionMixin, admin.ModelAdmin):
                     transaction_obj.transaction_status = 'Canceled and Refunded'
                     transaction_obj.save()
 
-                    models.WalletTransaction.objects.create(
+                    models.WalletTransactionn.objects.create(
                         user=user,
                         transaction_type='Credit',
                         transaction_amount=amount,
@@ -269,7 +269,7 @@ class TopUpRequestAdmin(admin.ModelAdmin):
                 topup_request.payment_channel = "Manual"
                 topup_request.save()
 
-                models.WalletTransaction.objects.create(
+                models.WalletTransactionn.objects.create(
                     user=user,
                     transaction_type='Credit',
                     transaction_amount=topup_request.amount,
@@ -313,7 +313,7 @@ class TopUpRequestAdmin(admin.ModelAdmin):
                         req.payment_channel = "Manual"
                         req.save()
 
-                    models.WalletTransaction.objects.create(
+                    models.WalletTransactionn.objects.create(
                         user=user,
                         transaction_type='Credit',
                         transaction_amount=total_amount,
@@ -381,7 +381,7 @@ class AFARegistrationAdmin(ExportActionMixin, admin.ModelAdmin):
                 afa_registration.transaction_status = 'Canceled and Refunded'
                 afa_registration.save()
 
-                models.WalletTransaction.objects.create(
+                models.WalletTransactionn.objects.create(
                     user=user,
                     transaction_type='Credit',
                     transaction_amount=amount,
@@ -415,7 +415,7 @@ class AFARegistrationAdmin(ExportActionMixin, admin.ModelAdmin):
                     afa_registration.transaction_status = 'Canceled and Refunded'
                     afa_registration.save()
 
-                    models.WalletTransaction.objects.create(
+                    models.WalletTransactionn.objects.create(
                         user=user,
                         transaction_type='Credit',
                         transaction_amount=amount,
@@ -454,6 +454,6 @@ admin.site.register(models.AgentBigTimeBundlePrice)
 admin.site.register(models.AgentVodaBundlePrice)
 admin.site.register(models.SuperAgentVodaBundlePrice)
 admin.site.register(models.VodaBundlePrice)
-admin.site.register(models.WalletTransaction)
+admin.site.register(models.WalletTransactionn)
 
 

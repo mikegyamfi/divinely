@@ -320,3 +320,18 @@ class WalletTransaction(models.Model):
         return f"{self.user.username} - {self.transaction_type} - {self.transaction_amount}"
 
 
+class WalletTransactionn(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    choices = [
+        ("Credit", "Credit"),
+        ("Debit", "Debit")
+    ]
+    transaction_type = models.CharField(max_length=250, null=False, blank=False, choices=choices)
+    transaction_amount = models.FloatField(null=False, blank=False)
+    transaction_use = models.CharField(max_length=250, null=False, blank=False)
+    new_balance = models.FloatField(null=False, blank=False)
+    transaction_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.transaction_type} - {self.transaction_amount}"
+
