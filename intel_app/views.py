@@ -933,7 +933,6 @@ def topup_info(request):
                     amount=amount,
                     reference=reference,
                     status=False,
-                    payment_channel='Paystack',
                 )
                 return redirect(authorization_url)
             else:
@@ -946,7 +945,6 @@ def topup_info(request):
                 amount=amount,
                 reference=reference,
                 status=False,
-                payment_channel='Paystack',
             )
             messages.success(request,
                              f"Your Request has been sent successfully.")
@@ -1539,8 +1537,7 @@ def paystack_webhook(request):
                     user=user,
                     reference=reference,
                     amount=real_amount,
-                    status='Completed',
-                    payment_channel='Paystack',
+                    status=True,
                     payment_status='Success',
                     new_balance=user.wallet,
                     time_credited=datetime.now(),
