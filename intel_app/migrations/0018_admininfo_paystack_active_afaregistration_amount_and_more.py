@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intel_app', '0017_remove_topuprequest_payment_channel_and_more'),
+        ('intel_app', '0016_agentvodabundleprice_superagentvodabundleprice_and_more.py'),
     ]
 
     operations = [
