@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from . import models
 from import_export.admin import ExportActionMixin
 
-from .models import TopUpRequestt
+from .models import TopUpRequest
 
 
 # Register your models here.
@@ -252,7 +252,7 @@ class TopUpRequestAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def credit_user(self, request, topup_id, *args, **kwargs):
-        topup_request = get_object_or_404(TopUpRequestt, pk=topup_id)
+        topup_request = get_object_or_404(TopUpRequest, pk=topup_id)
 
         if topup_request.status:
             self.message_user(request, "This transaction has already been credited.", level=messages.WARNING)
@@ -442,7 +442,7 @@ admin.site.register(models.IshareBundlePrice)
 admin.site.register(models.MTNBundlePrice)
 admin.site.register(models.Payment, PaymentAdmin)
 admin.site.register(models.AdminInfo)
-admin.site.register(models.TopUpRequestt, TopUpRequestAdmin)
+admin.site.register(models.TopUpRequest, TopUpRequestAdmin)
 admin.site.register(models.AgentIshareBundlePrice)
 admin.site.register(models.AgentMTNBundlePrice)
 admin.site.register(models.SuperAgentBigTimeBundlePrice)
