@@ -55,9 +55,4 @@ class Migration(migrations.Migration):
             name='transaction_status',
             field=models.CharField(choices=[('Pending', 'Pending'), ('Processing', 'Processing'), ('Completed', 'Completed'), ('Failed', 'Failed')], default='Completed', max_length=100),
         ),
-        migrations.AlterField(
-            model_name='topuprequest',
-            name='payment_channel',
-            field=models.CharField(blank=True, max_length=100, null=True),
-        ),
     ]
