@@ -927,8 +927,8 @@ def topup_info(request):
             res_data = response.json()
             if res_data.get('status'):
                 authorization_url = res_data['data']['authorization_url']
-                # Create a TopUpRequestt with status Pending
-                models.TopUpRequestt.objects.create(
+                # Create a TopUpRequest with status Pending
+                models.TopUpRequest.objects.create(
                     user=user,
                     amount=amount,
                     reference=reference,
@@ -940,7 +940,7 @@ def topup_info(request):
                 return redirect('topup_info')
         else:
             admin_phone = admin_info.phone_number if admin_info else 'ADMIN_PHONE_NUMBER'
-            models.TopUpRequestt.objects.create(
+            models.TopUpRequest.objects.create(
                 user=user,
                 amount=amount,
                 reference=reference,
@@ -967,7 +967,7 @@ def request_successful(request, reference):
 
 def topup_list(request):
     if request.user.is_superuser:
-        topup_requests = models.TopUpRequestt.objects.all().order_by('date').reverse()
+        topup_requests = models.TopUpRequest.objects.all().order_by('date').reverse()
         context = {
             'requests': topup_requests,
         }
@@ -980,7 +980,7 @@ def topup_list(request):
 @login_required(login_url='login')
 def credit_user_from_list(request, reference):
     if request.user.is_superuser:
-        crediting = models.TopUpRequestt.objects.filter(reference=reference).first()
+        crediting = models.TopUpRequest.objects.filter(reference=reference).first()
         user = crediting.user
         custom_user = models.CustomUser.objects.get(username=user.username)
         if crediting.status:
@@ -1209,7 +1209,7 @@ def credit_user_from_list(request, reference):
 #                     user.wallet += float(amount)
 #                     user.save()
 #
-#                     new_topup = models.TopUpRequestt.objects.create(
+#                     new_topup = models.TopUpRequest.objects.create(
 #                         user=user,
 #                         reference=reference,
 #                         amount=amount,
@@ -1515,7 +1515,7 @@ def paystack_webhook(request):
             return HttpResponse(status=200)
 
         # Check if this transaction has already been processed
-        if models.TopUpRequestt.objects.filter(reference=reference, status='Completed').exists():
+        if models.TopUpRequest.objects.filter(reference=reference, status='Completed').exists():
             return HttpResponse(status=200)
 
         with transaction.atomic():
@@ -1523,17 +1523,17 @@ def paystack_webhook(request):
             user.wallet = (user.wallet or 0) + real_amount
             user.save()
 
-            # Update TopUpRequestt
+            # Update TopUpRequest
             try:
-                topup_request = models.TopUpRequestt.objects.get(reference=reference)
+                topup_request = models.TopUpRequest.objects.get(reference=reference)
                 topup_request.amount = real_amount
                 topup_request.status = True
                 topup_request.new_balance = user.wallet
                 topup_request.time_credited = datetime.now()
                 topup_request.save()
-            except models.TopUpRequestt.DoesNotExist:
-                # Create a new TopUpRequestt if it doesn't exist
-                models.TopUpRequestt.objects.create(
+            except models.TopUpRequest.DoesNotExist:
+                # Create a new TopUpRequest if it doesn't exist
+                models.TopUpRequest.objects.create(
                     user=user,
                     reference=reference,
                     amount=real_amount,
