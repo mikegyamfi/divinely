@@ -1515,7 +1515,7 @@ def paystack_webhook(request):
             return HttpResponse(status=200)
 
         # Check if this transaction has already been processed
-        if models.TopUpRequest.objects.filter(reference=reference, status='Completed').exists():
+        if models.TopUpRequest.objects.filter(reference=reference, status=True, user=user).exists():
             return HttpResponse(status=200)
 
         with transaction.atomic():
@@ -1528,8 +1528,7 @@ def paystack_webhook(request):
                 topup_request = models.TopUpRequest.objects.get(reference=reference)
                 topup_request.amount = real_amount
                 topup_request.status = True
-                topup_request.new_balance = user.wallet
-                topup_request.time_credited = datetime.now()
+                topup_request.credited_at = datetime.now()
                 topup_request.save()
             except models.TopUpRequest.DoesNotExist:
                 # Create a new TopUpRequest if it doesn't exist
@@ -1538,9 +1537,7 @@ def paystack_webhook(request):
                     reference=reference,
                     amount=real_amount,
                     status=True,
-                    payment_status='Success',
-                    new_balance=user.wallet,
-                    time_credited=datetime.now(),
+                    credited_at=datetime.now(),
                 )
 
             # Create WalletTransactionn
