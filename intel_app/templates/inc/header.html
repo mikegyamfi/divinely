@@ -19,6 +19,14 @@
           <li class="nav-item">
             <a href="{% url 'history' %}" class="nav-link">Dashboard</a>
           </li>
+          {% if request.user.is_superuser %}
+          <li class="nav-item">
+            <a href="{% url 'topup_list' %}" class="nav-link">Requests</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'credit_user' %}" class="nav-link">Credit User</a>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a href="{% url 'logout' %}" class="nav-link">Log out</a>
           </li>
@@ -38,8 +46,15 @@
           <button href="#" class="btn btn-outline rounded-pill dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{request.user}}</button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
-                <a class="dropdown-item" href="{% url 'wallet_transactions' %}">Wallet Transactions</a>
+            <a class="dropdown-item" href="{% url 'wallet_transactions' %}">Wallet Transactions</a>
                 <a class="dropdown-item" href="{% url 'history' %}">Dashboard</a>
+               {% if request.user.is_superuser %}
+                <a class="dropdown-item" href="{% url 'mtn_admin' %}">MTN Admin</a>
+              <a class="dropdown-item" href="{% url 'bt_admin' %}">Big Time Admin</a>
+              <a class="dropdown-item" href="{% url 'at_admin' %}">AT Admin</a>
+              <a class="dropdown-item" href="{% url 'afa_admin' %}">AFA Admin</a>
+              <a class="dropdown-item" href="{% url 'voda_admin' %}">Voda Admin</a>
+              {% endif %}
             </div>
           </div>  
         </div>
