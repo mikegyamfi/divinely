@@ -901,7 +901,7 @@ def topup_info(request):
         user = request.user
         amount = request.POST.get("amount")
         reference = helper.top_up_ref_generator()
-        amount_in_pesewas = int(float(amount) * 1.01 * 100)  # Convert amount to pesewas (assuming GHS)
+        amount_in_pesewas = int(float(amount) * 100) # Convert amount to pesewas (assuming GHS)
 
         if paystack_active:
             # Proceed with Paystack payment
