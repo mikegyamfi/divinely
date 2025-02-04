@@ -30,6 +30,7 @@ def services(request):
 
 def pay_with_wallet(request):
     if request.method == "POST":
+        print("hello world")
         admin = models.AdminInfo.objects.filter().first().phone_number
         user = models.CustomUser.objects.get(id=request.user.id)
         phone_number = request.POST.get("phone")
