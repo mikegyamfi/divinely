@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from django.contrib import admin, messages
@@ -6,6 +7,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import path
 from django.utils.html import format_html
+from import_export import resources, fields
 
 from . import models
 from import_export.admin import ExportActionMixin
@@ -212,6 +214,64 @@ class TransactionAdmin(ExportActionMixin, admin.ModelAdmin):
         except Exception as e:
             self.message_user(request, f"An error occurred: {str(e)}", level=messages.ERROR)
     refund_selected_transactions.short_description = "Refund selected transactions"
+
+    @staticmethod
+    def _format_offer_for_export(offer_str: str) -> str:
+        if not offer_str:
+            return ""
+        # normalize
+        s = str(offer_str).upper().replace(" ", "")
+        # pull leading number (allow decimal, just in case)
+        m = re.match(r"([\d]+(?:\.\d+)?)", s)
+        if not m:
+            return offer_str  # fallback untouched if it doesn't match
+        val = float(m.group(1))
+
+        if val >= 1000:
+            gb = val / 1000.0
+            # tidy decimals (e.g., 2.00 -> 2, 1.50 -> 1.5)
+            txt = f"{gb:.2f}".rstrip("0").rstrip(".")
+            return f"{txt}"
+        # < 1000: return the numeric MB amount with no unit (per your ask to remove 'MB')
+        # If you prefer "500MB" instead, change to: return f"{int(val) if val.is_integer() else val}MB"
+        return f"{int(val) if val.is_integer() else val}"
+
+    # Provide a dynamic resource class so this works for ALL concrete transaction models
+    def get_export_resource_class(self):
+        admin_self = self
+
+        class TxnResource(resources.ModelResource):
+            # Override `offer` column
+            offer = fields.Field(column_name="offer")
+
+            def dehydrate_offer(self, obj):
+                return admin_self._format_offer_for_export(getattr(obj, "offer", ""))
+
+            class Meta:
+                model = admin_self.model  # important: bind to the concrete model of each subclassed admin
+                # include the fields you want in export (you can tweak this)
+                fields = (
+                    "id",
+                    "user__username",
+                    "bundle_number",
+                    "offer",
+                    "amount",
+                    "reference",
+                    "transaction_status",
+                    "transaction_date",
+                )
+                export_order = (
+                    "id",
+                    "user__username",
+                    "bundle_number",
+                    "offer",
+                    "amount",
+                    "reference",
+                    "transaction_status",
+                    "transaction_date",
+                )
+
+        return TxnResource
 
 
 @admin.register(models.IShareBundleTransaction)

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load bundle_filters %}
+
 
   {% block content %}
   {% include 'inc/header.html' %}
@@ -32,7 +34,7 @@
                     {% for txn in txns %}
                         <tr>
                             <th scope="row">{{txn.bundle_number}}</th>
-                            <td>{{txn.offer}}</td>
+                            <td>{{ txn.offer|format_bundle }}</td>
                             <td>{{txn.reference}}</td>
                             {% if txn.transaction_status == "Completed" %}
                             <td><span class="badge badge-pill badge-success me-1">{{txn.transaction_status}}</span></td>

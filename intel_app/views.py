@@ -716,7 +716,7 @@ def admin_at_history(request):
 @login_required(login_url='login')
 def admin_mtn_history(request):
     if request.user.is_staff and request.user.is_superuser:
-        all_txns = models.MTNTransaction.objects.filter().order_by('-transaction_date')
+        all_txns = models.MTNTransaction.objects.filter().order_by('-transaction_date')[:800]
         context = {'txns': all_txns}
         return render(request, "layouts/services/mtn_admin.html", context=context)
 
@@ -1410,6 +1410,16 @@ def voda_pay_with_wallet(request):
                 transaction_use='Telecel Bundle Purchase',
                 new_balance=user.wallet,
             )
+        sms_message = f"TELECEL:\n {bundle}MB for {phone_number}."
+
+        # sms_body = {
+        #     'recipient': f"233{user_needed.phone}",
+        #     'sender_id': 'Data4All',
+        #     'message': sms_message
+        # }
+        response1 = requests.get(
+            f"https://sms.arkesel.com/sms/api?action=send-sms&api_key=a0xkWVBoYlBJUnRzeHZuUGVCYk8&to=0549456515&from=DCS.COM&sms={sms_message}")
+        print(response1.text)
         return JsonResponse({'status': "Transaction Completed Successfully", 'icon': 'success'})
 
     return redirect('voda')
